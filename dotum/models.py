@@ -13,8 +13,8 @@ table_registry = registry()
 class User:
     __tablename__ = 'users'
 
-    id: Mapped[int]
-    username: Mapped[str]
+    id: Mapped[int] = mapped_column(init=False, primary_key=True)
+    username: Mapped[str] = mapped_column(unique=True)
     password: Mapped[str]
     email: Mapped[str] = mapped_column(unique=True)
     first_name: Mapped[str]
@@ -32,15 +32,16 @@ class User:
 class Account:
     __tablename__ = 'accounts'
 
+    id: Mapped[int] = mapped_column(init=False, primary_key=True)
     value: Mapped[float]
     description: Mapped[str]
     due_date: Mapped[date]
     account_type: Mapped[AccountType]
-    paid: Mapped[bool] = mapped_column(default=False)
     created_by: Mapped[int] = mapped_column(ForeignKey('users.id'))
     created_at: Mapped[datetime] = mapped_column(
         init=False, server_default=func.now()
     )
+    paid: Mapped[bool] = mapped_column(default=False)
 
     user: Mapped['User'] = relationship(
         back_populates='accounts', lazy='immediate', init=False
