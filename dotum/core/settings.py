@@ -8,11 +8,7 @@ class Settings(BaseSettings):
         env_file='.env', env_file_encoding='utf-8', extra='ignore'
     )
 
-    # DATABASE_URL: str
-    # ACCESS_TOKEN_EXPIRE_MINUTES: int
-    # ALGORITHM: str
-    # DEBUG: int = 0
-    # SECRET_KEY: str
+    DATABASE_URL: str
     VERSION: str = 'dev'
     APP_URL: str = 'http://localhost:8000'
 
