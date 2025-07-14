@@ -28,6 +28,15 @@ def create_user(schema: UserCreate, session: Session = Depends(get_session)):
             status_code=status.HTTP_409_CONFLICT, detail=AlreadyExists.EMAIL
         )
 
+    db_user = session.scalar(
+        select(User).where(User.username == schema.username)
+    )
+
+    if db_user:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT, detail=AlreadyExists.USERNAME
+        )
+
     db_user = User(**schema.model_dump())
 
     session.add(db_user)
@@ -57,6 +66,17 @@ def update_user(
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
                 detail=AlreadyExists.EMAIL,
+            )
+
+    if schema.username:
+        db_username_exist = session.scalar(
+            select(User).where(User.username == schema.username)
+        )
+
+        if db_username_exist:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail=AlreadyExists.USERNAME,
             )
 
     upattr(schema, db_user)

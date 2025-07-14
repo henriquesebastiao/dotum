@@ -8,3 +8,6 @@ format:
 
 run:
 	poetry run fastapi dev dotum/main.py
+
+test:
+	poetry run pytest -s -x --cov=dotum -vv; poetry run coverage html

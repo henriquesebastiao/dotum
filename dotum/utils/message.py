@@ -5,6 +5,7 @@ class AlreadyExists(str, Enum):
     __complement = ' already exists'
 
     EMAIL = 'Email' + __complement
+    USERNAME = 'Username' + __complement
     EMAIL_OR_USERNAME = 'Email or username' + __complement
 
 
