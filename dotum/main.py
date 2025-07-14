@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.routing import APIRoute
 
 from dotum.core.settings import get_settings
+from dotum.routes import user
 
 
 def custom_generate_unique_id(route: APIRoute):
@@ -28,3 +29,5 @@ app = FastAPI(
         'email': 'contato@henriquesebastiao.com',
     },
 )
+
+app.include_router(user.router)
