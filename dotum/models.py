@@ -1,5 +1,5 @@
 from datetime import date, datetime
-from typing import Optional
+from typing import List, Optional
 
 from sqlalchemy import ForeignKey, func
 from sqlalchemy.orm import Mapped, mapped_column, registry, relationship
@@ -23,8 +23,11 @@ class User:
         init=False, server_default=func.now()
     )
 
-    user: Mapped['Account'] = relationship(
-        back_populates='users', lazy='immediate', init=False
+    accounts: Mapped[List['Account']] = relationship(
+        back_populates='user',
+        lazy='immediate',
+        init=False,
+        default_factory=list,
     )
 
 
