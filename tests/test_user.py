@@ -53,7 +53,7 @@ def test_create_user_already_exists_username(client, user):
 
 def test_update_user(client, user):
     response = client.patch(
-        '/user/1',
+        f'/user/{user.id}',
         json={'email': 'testeupdate@test.com'},
     )
 
@@ -63,7 +63,7 @@ def test_update_user(client, user):
 
 def test_update_user_already_exists_email(client, user):
     response = client.patch(
-        '/user/1',
+        f'/user/{user.id}',
         json={
             'email': 'test@test.com',
         },
@@ -75,7 +75,7 @@ def test_update_user_already_exists_email(client, user):
 
 def test_update_user_already_exists_username(client, user):
     response = client.patch(
-        '/user/1',
+        f'/user/{user.id}',
         json={
             'username': 'test',
         },
@@ -85,8 +85,20 @@ def test_update_user_already_exists_username(client, user):
     assert response.json() == {'detail': 'Username already exists'}
 
 
+def test_update_user_does_not_exists(client):
+    response = client.patch(
+        '/user/1',
+        json={
+            'username': 'test',
+        },
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.json() == {'detail': 'User does not exist'}
+
+
 def test_delete_user(client, user):
-    response = client.delete('/user/1')
+    response = client.delete(f'/user/{user.id}')
 
     assert response.status_code == status.HTTP_200_OK
     assert response.json() == {'message': 'Usuário deletado'}

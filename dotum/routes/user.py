@@ -57,6 +57,12 @@ def update_user(
 ):
     db_user = session.scalar(select(User).where(User.id == user_id))
 
+    if db_user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=DoesNotExist.USER,
+        )
+
     if schema.email:
         db_email_exist = session.scalar(
             select(User).where(User.email == schema.email)
