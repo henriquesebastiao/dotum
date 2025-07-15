@@ -89,6 +89,24 @@ def account(session, user):
 
 
 @pytest.fixture
+def account2(session, user2):
+    account = Account(
+        value=1500,
+        description='Test account',
+        due_date=datetime.now(),
+        account_type='payable',
+        paid=False,
+        created_by=user2.id,
+    )
+
+    session.add(account)
+    session.commit()
+    session.refresh(account)
+
+    return account
+
+
+@pytest.fixture
 def account_payable_2000(session, user):
     account = Account(
         value=2000,

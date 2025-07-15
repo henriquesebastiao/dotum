@@ -11,7 +11,6 @@ class AccountBase(BaseModel):
     due_date: date
     account_type: AccountType
     paid: bool = False
-    created_by: int
 
 
 class AccountCreate(AccountBase): ...
@@ -25,7 +24,8 @@ class AccountUpdate(BaseModel):
     paid: bool | None = None
 
 
-class AccountSchema(AccountBase): ...
+class AccountSchema(AccountBase):
+    created_by: int
 
 
 class AccountInformation(BaseModel):

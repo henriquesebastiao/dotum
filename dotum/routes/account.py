@@ -1,9 +1,12 @@
+from typing import Annotated
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from dotum.core.database import get_session
-from dotum.models import Account
+from dotum.core.security import get_current_user
+from dotum.models import Account, User
 from dotum.schemas import Message
 from dotum.schemas.account import (
     AccountCreate,
@@ -16,6 +19,7 @@ from dotum.utils import response
 from dotum.utils.database import upattr
 from dotum.utils.enum import AccountType
 from dotum.utils.message import DoesNotExist
+from dotum.utils.raises import NotEnoughPermissions
 
 router = APIRouter(prefix='/account', tags=['Contas'])
 
@@ -27,9 +31,13 @@ router = APIRouter(prefix='/account', tags=['Contas'])
     summary='Registra uma nova conta',
 )
 def create_account(
-    schema: AccountCreate, session: Session = Depends(get_session)
+    schema: AccountCreate,
+    current_user: Annotated[User, Depends(get_current_user)],
+    session: Session = Depends(get_session),
 ):
-    db_user = Account(**schema.model_dump())
+    account = schema.model_dump()
+    account['created_by'] = current_user.id
+    db_user = Account(**account)
 
     session.add(db_user)
     session.commit()
@@ -47,6 +55,7 @@ def create_account(
 def update_account(
     account_id: int,
     schema: AccountUpdate,
+    current_user: Annotated[User, Depends(get_current_user)],
     session: Session = Depends(get_session),
 ):
     db_account = session.scalar(
@@ -58,6 +67,9 @@ def update_account(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=DoesNotExist.ACCOUNT,
         )
+
+    if db_account.created_by != current_user.id:
+        raise NotEnoughPermissions()
 
     upattr(schema, db_account)
 
@@ -74,7 +86,11 @@ def update_account(
     responses=response.CHANGE_ACCOUNT,
     summary='Deleta uma conta',
 )
-def delete_account(account_id: int, session: Session = Depends(get_session)):
+def delete_account(
+    account_id: int,
+    current_user: Annotated[User, Depends(get_current_user)],
+    session: Session = Depends(get_session),
+):
     db_account = session.scalar(
         select(Account).where(Account.id == account_id)
     )
@@ -84,6 +100,9 @@ def delete_account(account_id: int, session: Session = Depends(get_session)):
             status_code=status.HTTP_404_NOT_FOUND,
             detail=DoesNotExist.ACCOUNT,
         )
+
+    if db_account.created_by != current_user.id:
+        raise NotEnoughPermissions()
 
     session.delete(db_account)
     session.commit()
@@ -96,7 +115,10 @@ def delete_account(account_id: int, session: Session = Depends(get_session)):
     response_model=AccountList,
     summary='Retorna uma lista com todas as contas e seus dados',
 )
-def get_all_accounts(session: Session = Depends(get_session)):
+def get_all_accounts(
+    current_user: Annotated[User, Depends(get_current_user)],
+    session: Session = Depends(get_session),
+):
     stmt = select(
         Account.value,
         Account.description,
@@ -114,7 +136,10 @@ def get_all_accounts(session: Session = Depends(get_session)):
     response_model=TotalAccounts,
     summary='Retorna o total de contas a pagar',
 )
-def get_total_accounts_payable(session: Session = Depends(get_session)):
+def get_total_accounts_payable(
+    current_user: Annotated[User, Depends(get_current_user)],
+    session: Session = Depends(get_session),
+):
     stmt = select(func.sum(Account.value)).where(
         (Account.account_type == AccountType.PAYABLE) & (Account.paid == False)
     )
@@ -128,7 +153,10 @@ def get_total_accounts_payable(session: Session = Depends(get_session)):
     response_model=TotalAccounts,
     summary='Retorna o total de contas a receber',
 )
-def get_total_accounts_receivable(session: Session = Depends(get_session)):
+def get_total_accounts_receivable(
+    current_user: Annotated[User, Depends(get_current_user)],
+    session: Session = Depends(get_session),
+):
     stmt = select(func.sum(Account.value)).where(
         (Account.account_type == AccountType.RECEIVABLE)
         & (Account.paid == False)
@@ -143,7 +171,10 @@ def get_total_accounts_receivable(session: Session = Depends(get_session)):
     response_model=TotalAccounts,
     summary='Retorna o total geral de contas',
 )
-def get_grand_total_of_accounts(session: Session = Depends(get_session)):
+def get_grand_total_of_accounts(
+    current_user: Annotated[User, Depends(get_current_user)],
+    session: Session = Depends(get_session),
+):
     def get_total(account_type: AccountType) -> float:
         stmt = select(func.sum(Account.value)).where(
             (Account.account_type == account_type) & (Account.paid == False)
