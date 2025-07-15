@@ -11,3 +11,8 @@ run:
 
 test:
 	poetry run pytest -s -x --cov=dotum -vv; poetry run coverage html
+
+export:
+	rm requirements.txt && poetry export -f requirements.txt --output requirements.txt --without-hashes --without dev
+up:
+	docker compose up -d

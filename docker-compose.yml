@@ -1,0 +1,39 @@
+services:
+  database:
+    container_name: db-dotum
+    image: postgres:17-alpine
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    env_file:
+      - .env
+    environment:
+      - PGPORT=5435
+    ports:
+      - "5435:5435"
+  
+  app:
+    container_name: app-dotum
+    image: 'dotum:${TAG-latest}'
+    restart: always
+    build: .
+    volumes:
+      - ./dotum:/code/app
+      - ./migrations:/code/migrations
+    depends_on:
+      database:
+        condition: service_healthy
+        restart: true
+    env_file:
+      - .env
+    ports:
+      - "9002:8000"
+
+volumes:
+  pgdata:
