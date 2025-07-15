@@ -1,7 +1,7 @@
 [project]
 name = "dotum"
 version = "0.1.0"
-description = ""
+description = "Sistema de contas a pagar e contas a receber"
 authors = [
     {name = "Henrique Sebastião",email = "contato@henriquesebastiao.com"}
 ]
