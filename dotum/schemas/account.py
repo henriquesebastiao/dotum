@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import date
 
 from pydantic import BaseModel
 
@@ -12,7 +12,6 @@ class AccountBase(BaseModel):
     account_type: AccountType
     paid: bool = False
     created_by: int
-    created_at: datetime
 
 
 class AccountCreate(AccountBase): ...
@@ -24,8 +23,6 @@ class AccountUpdate(BaseModel):
     due_date: date | None = None
     account_type: AccountType | None = None
     paid: bool | None = None
-    created_by: int | None = None
-    created_at: datetime | None = None
 
 
 class AccountSchema(AccountBase): ...
