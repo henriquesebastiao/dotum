@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
       PYTHON_COLORS: 0
 
     steps:
