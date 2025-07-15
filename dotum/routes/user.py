@@ -1,14 +1,18 @@
+from typing import Annotated
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from dotum.core.database import get_session
+from dotum.core.security import get_current_user, get_password_hash
 from dotum.models import User
 from dotum.schemas import Message
 from dotum.schemas.user import UserCreate, UserSchema, UserUpdate
 from dotum.utils import response
 from dotum.utils.database import upattr
 from dotum.utils.message import AlreadyExists, DoesNotExist
+from dotum.utils.raises import NotEnoughPermissions
 
 router = APIRouter(prefix='/user', tags=['Usuário'])
 
@@ -37,6 +41,8 @@ def create_user(schema: UserCreate, session: Session = Depends(get_session)):
             status_code=status.HTTP_409_CONFLICT, detail=AlreadyExists.USERNAME
         )
 
+    schema.password = get_password_hash(schema.password)
+
     db_user = User(**schema.model_dump())
 
     session.add(db_user)
@@ -53,8 +59,14 @@ def create_user(schema: UserCreate, session: Session = Depends(get_session)):
     summary='Atualiza um usuário',
 )
 def update_user(
-    user_id: int, schema: UserUpdate, session: Session = Depends(get_session)
+    user_id: int,
+    schema: UserUpdate,
+    current_user: Annotated[User, Depends(get_current_user)],
+    session: Session = Depends(get_session),
 ):
+    if user_id != current_user.id:
+        raise NotEnoughPermissions()
+
     db_user = session.scalar(select(User).where(User.id == user_id))
 
     if db_user is None:
@@ -100,7 +112,14 @@ def update_user(
     responses=response.DELETE_USER,
     summary='Deleta um usuário',
 )
-def delete_user(user_id: int, session: Session = Depends(get_session)):
+def delete_user(
+    user_id: int,
+    current_user: Annotated[User, Depends(get_current_user)],
+    session: Session = Depends(get_session),
+):
+    if user_id != current_user.id:
+        raise NotEnoughPermissions()
+
     db_user = session.scalar(select(User).where(User.id == user_id))
 
     if db_user is None:

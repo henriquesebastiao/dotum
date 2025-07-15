@@ -51,61 +51,45 @@ def test_create_user_already_exists_username(client, user):
     assert response.json() == {'detail': 'Username already exists'}
 
 
-def test_update_user(client, user):
+def test_update_user(client, user, auth):
     response = client.patch(
         f'/user/{user.id}',
         json={'email': 'testeupdate@test.com'},
+        headers=auth,
     )
 
     assert response.status_code == status.HTTP_200_OK
     assert response.json()['email'] == 'testeupdate@test.com'
 
 
-def test_update_user_already_exists_email(client, user):
+def test_update_user_already_exists_email(client, user, auth):
     response = client.patch(
         f'/user/{user.id}',
         json={
             'email': 'test@test.com',
         },
+        headers=auth,
     )
 
     assert response.status_code == status.HTTP_409_CONFLICT
     assert response.json() == {'detail': 'Email already exists'}
 
 
-def test_update_user_already_exists_username(client, user):
+def test_update_user_already_exists_username(client, user, auth):
     response = client.patch(
         f'/user/{user.id}',
         json={
             'username': 'test',
         },
+        headers=auth,
     )
 
     assert response.status_code == status.HTTP_409_CONFLICT
     assert response.json() == {'detail': 'Username already exists'}
 
 
-def test_update_user_does_not_exists(client):
-    response = client.patch(
-        '/user/1',
-        json={
-            'username': 'test',
-        },
-    )
-
-    assert response.status_code == status.HTTP_404_NOT_FOUND
-    assert response.json() == {'detail': 'User does not exist'}
-
-
-def test_delete_user(client, user):
-    response = client.delete(f'/user/{user.id}')
+def test_delete_user(client, user, auth):
+    response = client.delete(f'/user/{user.id}', headers=auth)
 
     assert response.status_code == status.HTTP_200_OK
     assert response.json() == {'message': 'Usuário deletado'}
-
-
-def test_delete_user_does_not_exist(client):
-    response = client.delete('/user/1')
-
-    assert response.status_code == status.HTTP_404_NOT_FOUND
-    assert response.json() == {'detail': 'User does not exist'}

@@ -9,6 +9,9 @@ class Settings(BaseSettings):
     )
 
     DATABASE_URL: str
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    ALGORITHM: str
+    SECRET_KEY: str
     VERSION: str = 'dev'
     APP_URL: str = 'http://localhost:8000'
 

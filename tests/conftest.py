@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from testcontainers.postgres import PostgresContainer
 
 from dotum.core.database import get_session
+from dotum.core.security import get_password_hash
 from dotum.main import app
 from dotum.models import Account, User, table_registry
 
@@ -44,7 +45,7 @@ def user(session):
     user = User(
         username='test',
         email='test@test.com',
-        password='testtest',
+        password=get_password_hash('testtest'),
         first_name='Teste',
     )
     session.add(user)
@@ -157,3 +158,18 @@ def account_receivable_1300(session, user):
     session.refresh(account)
 
     return account
+
+
+@pytest.fixture
+def token(client, user):
+    response = client.post(
+        '/token',
+        data={'username': user.username, 'password': 'testtest'},
+    )
+
+    return response.json()['access_token']
+
+
+@pytest.fixture
+def auth(token):
+    return {'Authorization': f'Bearer {token}'}
