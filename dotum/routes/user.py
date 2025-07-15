@@ -11,7 +11,7 @@ from dotum.schemas import Message
 from dotum.schemas.user import UserCreate, UserSchema, UserUpdate
 from dotum.utils import response
 from dotum.utils.database import upattr
-from dotum.utils.message import AlreadyExists, DoesNotExist
+from dotum.utils.message import AlreadyExists
 from dotum.utils.raises import NotEnoughPermissions
 
 router = APIRouter(prefix='/user', tags=['Usuário'])
@@ -69,12 +69,6 @@ def update_user(
 
     db_user = session.scalar(select(User).where(User.id == user_id))
 
-    if db_user is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=DoesNotExist.USER,
-        )
-
     if schema.email:
         db_email_exist = session.scalar(
             select(User).where(User.email == schema.email)
@@ -121,12 +115,6 @@ def delete_user(
         raise NotEnoughPermissions()
 
     db_user = session.scalar(select(User).where(User.id == user_id))
-
-    if db_user is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=DoesNotExist.USER,
-        )
 
     session.delete(db_user)
     session.commit()

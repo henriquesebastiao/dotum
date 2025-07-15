@@ -62,6 +62,17 @@ def test_update_user(client, user, auth):
     assert response.json()['email'] == 'testeupdate@test.com'
 
 
+def test_update_other_user(client, user2, auth):
+    response = client.patch(
+        f'/user/{user2.id}',
+        json={'email': 'testeupdate@test.com'},
+        headers=auth,
+    )
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert response.json() == {'detail': 'Not enough permission'}
+
+
 def test_update_user_already_exists_email(client, user, auth):
     response = client.patch(
         f'/user/{user.id}',
@@ -93,3 +104,10 @@ def test_delete_user(client, user, auth):
 
     assert response.status_code == status.HTTP_200_OK
     assert response.json() == {'message': 'Usuário deletado'}
+
+
+def test_delete_other_user(client, auth):
+    response = client.delete('/user/10', headers=auth)
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert response.json() == {'detail': 'Not enough permission'}
