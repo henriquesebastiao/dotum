@@ -26,3 +26,19 @@ class AccountUpdate(BaseModel):
 
 
 class AccountSchema(AccountBase): ...
+
+
+class AccountInformation(BaseModel):
+    value: float
+    description: str
+    due_date: date
+    account_type: AccountType
+    paid: bool
+
+
+class AccountList(BaseModel):
+    accounts: list[AccountInformation]
+
+
+class TotalAccounts(BaseModel):
+    total: float

@@ -84,3 +84,75 @@ def account(session, user):
     session.refresh(account)
 
     return account
+
+
+@pytest.fixture
+def account_payable_2000(session, user):
+    account = Account(
+        value=2000,
+        description='Test account',
+        due_date=datetime.now(),
+        account_type='payable',
+        paid=False,
+        created_by=user.id,
+    )
+
+    session.add(account)
+    session.commit()
+    session.refresh(account)
+
+    return account
+
+
+@pytest.fixture
+def account_payable_2500(session, user):
+    account = Account(
+        value=2500,
+        description='Test account',
+        due_date=datetime.now(),
+        account_type='payable',
+        paid=False,
+        created_by=user.id,
+    )
+
+    session.add(account)
+    session.commit()
+    session.refresh(account)
+
+    return account
+
+
+@pytest.fixture
+def account_receivable_1200(session, user):
+    account = Account(
+        value=1200,
+        description='Test account',
+        due_date=datetime.now(),
+        account_type='receivable',
+        paid=False,
+        created_by=user.id,
+    )
+
+    session.add(account)
+    session.commit()
+    session.refresh(account)
+
+    return account
+
+
+@pytest.fixture
+def account_receivable_1300(session, user):
+    account = Account(
+        value=1300,
+        description='Test account',
+        due_date=datetime.now(),
+        account_type='receivable',
+        paid=False,
+        created_by=user.id,
+    )
+
+    session.add(account)
+    session.commit()
+    session.refresh(account)
+
+    return account

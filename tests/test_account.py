@@ -66,3 +66,50 @@ def test_delete_account_does_not_exist(client):
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert response.json() == {'detail': 'Account does not exist'}
+
+
+def test_get_all_accounts(client, account):
+    response = client.get('/account/')
+
+    assert response.status_code == status.HTTP_200_OK
+
+    response = response.json()
+
+    assert response == {
+        'accounts': [
+            {
+                'value': 1500,
+                'description': 'Test account',
+                'due_date': date.today().isoformat(),
+                'account_type': 'payable',
+                'paid': False,
+            }
+        ]
+    }
+
+
+def test_get_total_accounts_payable(
+    client, account_payable_2000, account_payable_2500
+):
+    response = client.get('/account/total-accounts-payable/')
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()['total'] == 4500
+
+
+def test_get_total_accounts_receivable(
+    client, account_receivable_1200, account_receivable_1300
+):
+    response = client.get('/account/total-accounts-receivable/')
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()['total'] == 2500
+
+
+def test_get_grand_total_of_accounts(
+    client, account_payable_2000, account_receivable_1200
+):
+    response = client.get('/account/grand-total-of-accounts/')
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()['total'] == -800
