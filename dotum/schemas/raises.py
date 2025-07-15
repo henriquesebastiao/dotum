@@ -17,3 +17,7 @@ class EmailOrUsernameAlreadyExists(BaseRaiseModel):
 
 class UserDoesNotExists(BaseRaiseModel):
     detail: str = message.DoesNotExist.USER
+
+
+class AccountDosNotExists(BaseRaiseModel):
+    detail: str = message.DoesNotExist.ACCOUNT

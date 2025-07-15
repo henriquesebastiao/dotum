@@ -22,3 +22,9 @@ DELETE_USER = {
         'model': raises.UserDoesNotExists,
     }
 }
+
+CHANGE_ACCOUNT = {
+    status.HTTP_404_NOT_FOUND: {
+        'model': raises.AccountDosNotExists,
+    }
+}

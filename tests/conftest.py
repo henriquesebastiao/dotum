@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
@@ -6,7 +8,7 @@ from sqlalchemy.pool import StaticPool
 
 from dotum.core.database import get_session
 from dotum.main import app
-from dotum.models import User, table_registry
+from dotum.models import Account, User, table_registry
 
 
 @pytest.fixture
@@ -64,3 +66,21 @@ def user2(session):
     session.refresh(user)
 
     return user
+
+
+@pytest.fixture
+def account(session, user):
+    account = Account(
+        value=1500,
+        description='Test account',
+        due_date=datetime.now(),
+        account_type='payable',
+        paid=False,
+        created_by=user.id,
+    )
+
+    session.add(account)
+    session.commit()
+    session.refresh(account)
+
+    return account

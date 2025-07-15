@@ -13,3 +13,4 @@ class DoesNotExist(str, Enum):
     __complement = ' does not exist'
 
     USER = 'User' + __complement
+    ACCOUNT = 'Account' + __complement
