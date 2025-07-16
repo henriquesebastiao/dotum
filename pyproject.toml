@@ -42,6 +42,7 @@ quote-style = 'single'
 
 [tool.ruff.lint.per-file-ignores]
 'tests/*.py' = ['PLR2004']
+'dotum/main.py' = ['E501']
 'dotum/routes/*.py' = ['E712']  # Possibilita Account.paid == False
 
 [tool.pytest.ini_options]
