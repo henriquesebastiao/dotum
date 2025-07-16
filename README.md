@@ -51,8 +51,8 @@ docker compose up -d
 
 Pronto! Você já pode abrir seu navegador e acessar as seguintes URLs:
 
-- Documentação interativa automática com Swagger UI (do backend OpenAPI): http://localhost:9002
-- Redoc, uma versão mais legível da documentação: http://localhost:9002/redoc
+- Documentação interativa automática com Swagger UI (do backend OpenAPI): http://localhost:9003
+- Redoc, uma versão mais legível da documentação: http://localhost:9003/redoc
 
 ### Executando os testes
 

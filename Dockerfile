@@ -11,6 +11,6 @@ COPY . /code/
 RUN pip install --no-cache-dir --root-user-action ignore --upgrade pip \
     && pip install --no-cache-dir --root-user-action ignore -r requirements.txt
 
-EXPOSE 9002
+EXPOSE 8000
 
 ENTRYPOINT ["./entrypoint.sh"]

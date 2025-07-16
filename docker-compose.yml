@@ -33,7 +33,7 @@ services:
     env_file:
       - .env
     ports:
-      - "9002:8000"
+      - "9003:8000"
 
 volumes:
   pgdata:
