@@ -28,6 +28,7 @@ class User:
         lazy='immediate',
         init=False,
         default_factory=list,
+        cascade='delete',
     )
 
 
