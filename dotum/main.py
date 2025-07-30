@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.routing import APIRoute
 
 from dotum.core.settings import get_settings
-from dotum.routes import account, token, user
+from dotum.routes import account, insights, token, user
 
 
 def custom_generate_unique_id(route: APIRoute):
@@ -53,4 +53,5 @@ app.add_middleware(
 
 app.include_router(user.router)
 app.include_router(account.router)
+app.include_router(insights.router)
 app.include_router(token.router)

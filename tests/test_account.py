@@ -114,7 +114,7 @@ def test_get_all_accounts(client, account, auth):
 def test_get_total_accounts_payable(
     client, account_payable_2000, account_payable_2500, auth
 ):
-    response = client.get('/account/total-accounts-payable/', headers=auth)
+    response = client.get('/insights/total-accounts-payable/', headers=auth)
 
     assert response.status_code == status.HTTP_200_OK
     assert response.json()['total'] == 4500
@@ -123,7 +123,7 @@ def test_get_total_accounts_payable(
 def test_get_total_accounts_receivable(
     client, account_receivable_1200, account_receivable_1300, auth
 ):
-    response = client.get('/account/total-accounts-receivable/', headers=auth)
+    response = client.get('/insights/total-accounts-receivable/', headers=auth)
 
     assert response.status_code == status.HTTP_200_OK
     assert response.json()['total'] == 2500
@@ -132,7 +132,7 @@ def test_get_total_accounts_receivable(
 def test_get_grand_total_of_accounts(
     client, account_payable_2000, account_receivable_1200, auth
 ):
-    response = client.get('/account/grand-total-of-accounts/', headers=auth)
+    response = client.get('/insights/grand-total-of-accounts/', headers=auth)
 
     assert response.status_code == status.HTTP_200_OK
     assert response.json()['total'] == -800
