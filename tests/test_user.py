@@ -111,3 +111,12 @@ def test_delete_other_user(client, auth):
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     assert response.json() == {'detail': 'Not enough permission'}
+
+
+def test_possible_to_delete_user_that_is_related_ta_an_account(
+    user, account, auth, client
+):
+    response = client.delete(f'/user/{user.id}', headers=auth)
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()['message'] == 'Usuário deletado'
