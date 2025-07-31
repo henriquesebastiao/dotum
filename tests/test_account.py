@@ -111,6 +111,13 @@ def test_get_all_accounts(client, account, auth):
     }
 
 
+def test_get_account(client, account, auth):
+    response = client.get(f'/account/{account.id}', headers=auth)
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()['value'] == account.value
+
+
 def test_get_total_accounts_payable(
     client, account_payable_2000, account_payable_2500, auth
 ):
