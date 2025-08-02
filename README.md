@@ -2,9 +2,10 @@
 
 [![CI](https://github.com/henriquesebastiao/dotum/actions/workflows/test.yml/badge.svg)](https://github.com/henriquesebastiao/dotum/actions/workflows/test.yml)
 [![coverage](https://coverage-badge.samuelcolvin.workers.dev/henriquesebastiao/dotum.svg)](https://coverage-badge.samuelcolvin.workers.dev/redirect/henriquesebastiao/dotum)
-[![fastapi](https://img.shields.io/badge/FastAPI-009688?style=flat&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
-[![postgresql](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
-[![docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white)](https://www.docker.com/)
+[![Static Badge](https://img.shields.io/badge/status-stable-%232FBF50)](https://github.com/henriquesebastiao/dotum/)
+[![Website](https://img.shields.io/website?url=https%3A%2F%2Fdotum.henriquesebastiao.com%2F)](https://dotum.henriquesebastiao.com/)
+[![GitHub Release](https://img.shields.io/github/v/release/henriquesebastiao/dotum?color=blue)](https://github.com/henriquesebastiao/dotum/releases)
+[![GitHub License](https://img.shields.io/github/license/henriquesebastiao/dotum?color=blue)](https://github.com/henriquesebastiao/dotum/blob/main/LICENSE)
 
 Este projeto é uma solução para um desafio de programação back-end, cujo objetivo é desenvolver uma aplicação para o controle de contas a pagar e contas a receber. A proposta foca na construção de uma lógica sólida, estrutura de código bem organizada e cumprimento dos requisitos funcionais.
 
